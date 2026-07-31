@@ -20,13 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module rom #(
+module rom_external #(
     parameter int ADDR_WIDTH = 11,
     parameter int DATA_WIDTH = 8,
     parameter string ROM_FILE = "rom_data.mem"
 ) (
     input  logic [ADDR_WIDTH-1:0] addr,
-    output logic [DATA_WIDTH-1:0] data
+    output logic [DATA_WIDTH-1:0] data,
+    input  logic out_en,
+    input  logic ce
 );
 
     logic [DATA_WIDTH-1:0] mem [0:(1 << ADDR_WIDTH)-1];
@@ -37,6 +39,6 @@ module rom #(
     end
 
     assign raw_data = mem[addr];
-    assign data = raw_data;
+    assign data = (out_en & ce) ? raw_data : 'bz;
 
 endmodule
